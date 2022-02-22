@@ -9,30 +9,81 @@ SELECT *
 FROM sql_datacleaning.met_objects_clean;
 
 -- Clean column names
+-- I'm still looking for an efficient way to automate this process...
 
 ALTER TABLE `sql_datacleaning`.`met_objects_clean` 
-CHANGE COLUMN `ï»¿Object Number` `object_number` TEXT NULL DEFAULT NULL;
+CHANGE COLUMN `ï»¿Object Number` `object_number` TEXT NULL DEFAULT NULL,
+CHANGE COLUMN `Is Highlight` `is_highlight` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Is Timeline Work` `is_timeline_work` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Is Public Domain` `is_public_domain` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object ID` `object_id` INT NULL DEFAULT NULL ,
+CHANGE COLUMN `Gallery Number` `gallery_number` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Department` `department` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `AccessionYear` `accessionyear` INT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object Name` `object_name` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Title` `title` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Culture` `culture` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Period` `period` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Dynasty` `dynasty` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Reign` `reign` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Portfolio` `portfolio` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Constituent ID` `constituent_id` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Role` `artist_role` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Prefix` `artist_prefix` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Display Name` `artist_display_name` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Display Bio` `artist_display_bio` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Suffix` `artist_suffix` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Alpha Sort` `artist_alpha_sort` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Nationality` `artist_nationality` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Begin Date` `artist_begin_date` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist End Date` `artist_end_date` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Gender` `artist_gender` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist ULAN URL` `artist_ULAN_URL` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Artist Wikidata URL` `artist_wikidata_URL` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object Date` `object_date` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object Begin Date` `object_begin_date` INT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object End Date` `object_end_date` INT NULL DEFAULT NULL ,
+CHANGE COLUMN `Medium` `medium` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Dimensions` `dimensions` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Credit Line` `credit_line` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Geography Type` `geography_type` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `City` `city` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `State` `state` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `County` `county` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Country` `country` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Region` `region` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Subregion` `subregion` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Locale` `locale` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Locus` `locus` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Excavation` `excavation` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `River` `river` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Classification` `classification` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Rights and Reproduction` `rights_and_reproduction` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Link Resource` `link_resource` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Object Wikidata URL` `object_wikidata_URL` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Metadata Date` `metadata_date` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Repository` `repository` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Tags` `tags` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Tags AAT URL` `tags_AAT_URL` TEXT NULL DEFAULT NULL ,
+CHANGE COLUMN `Tags Wikidata URL` `tags_wikidata_URL` TEXT NULL DEFAULT NULL ;
+
+-- Fix problem with years in 'artist_display_bio' and 'object_date'
 
 
--- [TRY] Create a table with the new column names, then UPDATE using the new names with a JOIN
-
-CREATE TABLE met_new_column_names AS
-SELECT REPLACE(LOWER(COLUMN_NAME), ' ', '_') AS new_names, ORDINAL_POSITION 
-FROM `INFORMATION_SCHEMA`.`COLUMNS` 
-WHERE `TABLE_SCHEMA`='sql_datacleaning' 
-    AND `TABLE_NAME`='met_objects_clean';
-
--- Try this now
-
--- UPDATE TABLA1
--- SET TABLA1.COLUMNA = TABLA2.COLUMNA
--- FROM TABLA
--- JOIN TABLA2
--- ON (TABLA1.ORDINAL_POSITION = TABLA2.ORDINAL_POSITION)
 
 
--- SELECT * -- REPLACE(LOWER(COLUMN_NAME), ' ', '_')
--- FROM `INFORMATION_SCHEMA`.`COLUMNS` 
--- WHERE `TABLE_SCHEMA`='sql_datacleaning' 
-    -- AND `TABLE_NAME`='met_objects_clean'
--- ORDER BY ORDINAL_POSITION;
+
+
+
+
+
+-- Checklist:
+
+-- +Clean column names
+-- Misspelled words/numbers
+-- Extra spaces/characters
+-- Null data
+-- Duplicates
+-- Mismatched data types
+-- Inconsistent strings/date formats
+-- Truncated data
