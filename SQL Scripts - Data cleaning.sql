@@ -67,10 +67,34 @@ CHANGE COLUMN `Tags` `tags` TEXT NULL DEFAULT NULL ,
 CHANGE COLUMN `Tags AAT URL` `tags_AAT_URL` TEXT NULL DEFAULT NULL ,
 CHANGE COLUMN `Tags Wikidata URL` `tags_wikidata_URL` TEXT NULL DEFAULT NULL ;
 
--- Fix problem with years in 'artist_display_bio' and 'object_date'
+
+
+-- Fix typo in 'object_number', 'artist_display_bio' and 'object_date'
+
+SELECT *
+FROM met_objects_clean
+WHERE object_number LIKE '%â€“%';
+
+UPDATE met_objects_clean
+SET
+	object_number = REPLACE(object_number, "â€“", "-"),
+    artist_display_bio = REPLACE(artist_display_bio, "â€“", "-"),
+    object_date = REPLACE(object_date, "â€“", "-");
+
+-- Find duplicates
+
+SELECT object_number, object_id, link_resource, COUNT(*)
+FROM met_objects_clean
+GROUP BY object_number, object_id, link_resource
+HAVING COUNT(*) > 1;
 
 
 
+-- [TRY] Separate each tag in different columns
+
+SELECT tags, LENGTH(tags)
+FROM met_objects_clean
+ORDER BY LENGTH(tags) DESC
 
 
 
@@ -80,10 +104,10 @@ CHANGE COLUMN `Tags Wikidata URL` `tags_wikidata_URL` TEXT NULL DEFAULT NULL ;
 -- Checklist:
 
 -- +Clean column names
--- Misspelled words/numbers
+-- +Misspelled words/numbers
+-- +Duplicates
+-- Inconsistent strings/date formats
 -- Extra spaces/characters
 -- Null data
--- Duplicates
 -- Mismatched data types
--- Inconsistent strings/date formats
 -- Truncated data
