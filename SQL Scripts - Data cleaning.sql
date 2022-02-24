@@ -68,7 +68,6 @@ CHANGE COLUMN `Tags AAT URL` `tags_AAT_URL` TEXT NULL DEFAULT NULL ,
 CHANGE COLUMN `Tags Wikidata URL` `tags_wikidata_URL` TEXT NULL DEFAULT NULL ;
 
 
-
 -- Fix typo in 'object_number', 'artist_display_bio' and 'object_date'
 
 SELECT *
@@ -81,6 +80,7 @@ SET
     artist_display_bio = REPLACE(artist_display_bio, "â€“", "-"),
     object_date = REPLACE(object_date, "â€“", "-");
 
+
 -- Find duplicates
 
 SELECT object_number, object_id, link_resource, COUNT(*)
@@ -89,25 +89,68 @@ GROUP BY object_number, object_id, link_resource
 HAVING COUNT(*) > 1;
 
 
+-- Fix inconsistent formatting
+-- 1 - Split the values in 'tags' into multiple columns
 
--- [TRY] Separate each tag in different columns
-
-SELECT tags, LENGTH(tags)
+SELECT
+	object_id,
+	substring_index((substring_index(tags, '|', 1)), '|', -1) AS tag1,
+    CASE
+		WHEN substring_index((substring_index(tags, '|', 2)), '|', -1) = substring_index((substring_index(tags, '|', 1)), '|', -1) THEN ""
+        ELSE substring_index((substring_index(tags, '|', 2)), '|', -1) END AS tag2,
+    CASE
+		WHEN substring_index((substring_index(tags, '|', 3)), '|', -1) = substring_index((substring_index(tags, '|', 2)), '|', -1) THEN ""
+        WHEN substring_index((substring_index(tags, '|', 3)), '|', -1) = "" THEN ""
+        ELSE  substring_index((substring_index(tags, '|', 3)), '|', -1) END AS tag3,
+	CASE
+		WHEN substring_index((substring_index(tags, '|', 4)), '|', -1) = substring_index((substring_index(tags, '|', 3)), '|', -1) THEN ""
+        WHEN substring_index((substring_index(tags, '|', 4)), '|', -1) = "" THEN ""
+        ELSE substring_index((substring_index(tags, '|', 4)), '|', -1) END AS tag4
 FROM met_objects_clean
-ORDER BY LENGTH(tags) DESC
+ORDER BY object_id;
 
+-- ...and add it to the table
 
+ALTER TABLE met_objects_clean
+ADD COLUMN tag4 TEXT AFTER tags,
+ADD COLUMN tag3 TEXT AFTER tags,
+ADD COLUMN tag2 TEXT AFTER tags,
+ADD COLUMN tag1 TEXT AFTER tags;
 
+CREATE TEMPORARY TABLE met_tags AS
+SELECT
+	object_id,
+	substring_index((substring_index(tags, '|', 1)), '|', -1) AS tag1,
+    CASE
+		WHEN substring_index((substring_index(tags, '|', 2)), '|', -1) = substring_index((substring_index(tags, '|', 1)), '|', -1) THEN ""
+        ELSE substring_index((substring_index(tags, '|', 2)), '|', -1) END AS tag2,
+    CASE
+		WHEN substring_index((substring_index(tags, '|', 3)), '|', -1) = substring_index((substring_index(tags, '|', 2)), '|', -1) THEN ""
+        WHEN substring_index((substring_index(tags, '|', 3)), '|', -1) = "" THEN ""
+        ELSE  substring_index((substring_index(tags, '|', 3)), '|', -1) END AS tag3,
+	CASE
+		WHEN substring_index((substring_index(tags, '|', 4)), '|', -1) = substring_index((substring_index(tags, '|', 3)), '|', -1) THEN ""
+        WHEN substring_index((substring_index(tags, '|', 4)), '|', -1) = "" THEN ""
+        ELSE substring_index((substring_index(tags, '|', 4)), '|', -1) END AS tag4
+FROM met_objects_clean;
 
+UPDATE met_objects_clean mo
+JOIN met_tags mt
+	ON mo.object_id = mt.object_id
+SET
+	mo.tag1 = mt.tag1,
+    mo.tag2 = mt.tag2,
+    mo.tag3 = mt.tag3,
+    mo.tag4 = mt.tag4;
 
+-- Delete '|' from 'artist_suffix', 'artist_nationality' and 'artist_gender'
 
--- Checklist:
+SELECT artist_suffix, artist_nationality, artist_gender
+FROM met_objects_clean
+WHERE artist_suffix LIKE '%|%';
 
--- +Clean column names
--- +Misspelled words/numbers
--- +Duplicates
--- Inconsistent strings/date formats
--- Extra spaces/characters
--- Null data
--- Mismatched data types
--- Truncated data
+UPDATE met_objects_clean
+SET
+	artist_suffix = REPLACE(artist_suffix, "|", ""),
+    artist_nationality = REPLACE(artist_nationality, "|", ""),
+    artist_gender = REPLACE(artist_gender, "|", "");
