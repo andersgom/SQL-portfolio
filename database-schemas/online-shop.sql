@@ -1,6 +1,5 @@
 -- Online shop sample BD schema
 
-DROP SCHEMA IF exists `online-shop`;
 CREATE SCHEMA `online-shop` DEFAULT CHARACTER SET utf8mb4 ;
 USE `online-shop`;
 
