@@ -11,3 +11,11 @@ This repository holds all the code from my personal SQL projects. I'm using MySQ
         - Fix typos and inconsistent formatting
         - Use temporary tables
         - Use CASE statements
+
+- Sample Database schemas: Check this [link](/database-schemas/README-dbsch.md).
+
+    - Topics covered:
+        - Database schema design
+        - Create tables a columns
+        - Select Primary Keys
+        - Define relationships between tables
