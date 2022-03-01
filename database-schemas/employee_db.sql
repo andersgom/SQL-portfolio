@@ -19,7 +19,7 @@ CREATE TABLE `employee_db`.`employees` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-CREATE TABLE `employee_db`.`benefis` (
+CREATE TABLE `employee_db`.`benefits` (
   `benefit_tier` VARCHAR(1) NOT NULL,
   `health_insurance` TINYINT NOT NULL,
   `meal_allowance` TINYINT NOT NULL,
