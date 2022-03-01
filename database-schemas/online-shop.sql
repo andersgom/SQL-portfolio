@@ -1,9 +1,9 @@
 -- Online shop sample BD schema
 
-CREATE SCHEMA `online-shop` DEFAULT CHARACTER SET utf8mb4 ;
-USE `online-shop`;
+CREATE SCHEMA `online_shop` DEFAULT CHARACTER SET utf8mb4 ;
+USE `online_shop`;
 
-CREATE TABLE `online-shop`.`transactions` (
+CREATE TABLE `online_shop`.`transactions` (
   `transaction-id` VARCHAR(15) NOT NULL,
   `product-id` VARCHAR(15) NOT NULL,
   `customer-id` VARCHAR(15) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE `online-shop`.`transactions` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-CREATE TABLE `online-shop`.`products` (
+CREATE TABLE `online_shop`.`products` (
 	`product-id` VARCHAR(15) NOT NULL,
     `product` VARCHAR(60) NOT NULL,
     `price` INT NULL,
@@ -24,7 +24,7 @@ CREATE TABLE `online-shop`.`products` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4;
 
-CREATE TABLE `online-shop`.`customers` (
+CREATE TABLE `online_shop`.`customers` (
 	`customer-id` VARCHAR(15) NOT NULL,
     `customer-name` VARCHAR(60) NOT NULL,
     `country` VARCHAR(60) NULL,
