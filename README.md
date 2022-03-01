@@ -12,7 +12,7 @@ This repository holds all the code from my personal SQL projects. I'm using MySQ
         - Use temporary tables
         - Use CASE statements
 
-- Sample Database schemas: Check this [link](/database-schemas/README-dbsch.md).
+- Sample Database schemas: Check this [link](/database-schemas/README.md).
 
     - Topics covered:
         - Database schema design
